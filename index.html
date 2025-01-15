@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Expense Tracker</h1>
+
+      <!-- Expense form -->
+      <form action="" id="expense-form">
+        <input
+          type="text"
+          id="description"
+          placeholder="Description"
+          required
+        />
+        <input
+          type="number"
+          name=""
+          id="amount"
+          placeholder="Amount ($)"
+          required
+        />
+        <select name="" id="category">
+          <option value="">Select Category</option>
+          <option value="Food">Food</option>
+          <option value="Transport">Transport</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Others">Others</option>
+        </select>
+        <button type="submit" id="submit-button" class="submit-button">
+          Add Expense
+        </button>
+      </form>
+
+      <!-- Filters -->
+      <div class="filters">
+        <label for="filter-category">Filter expenses by category</label>
+        <select name="" id="filter-category">
+          <option value="All">All Categories</option>
+          <option value="Food">Food</option>
+          <option value="Transport">Transport</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+
+      <!-- Expense list -->
+      <div id="expense-list-container">
+        <h3>Expense List</h3>
+        <table id="expense-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Amount ($)</th>
+              <th>Category</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="expense-list"></tbody>
+        </table>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-section">
+        <h2>Expense Charts</h2>
+        <div class="chart-container">
+          <canvas id="category-chart" width="400" height="400"></canvas>
+        </div>
+        <div class="chart-container">
+          <canvas id="time-chart" width="400" height="400"></canvas>
+        </div>
+      </div>
+      <button id="export-csv" class="btn">Export Data as CSV</button>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
