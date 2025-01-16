@@ -149,6 +149,14 @@ function addExpense(description, amount, category) {
   document.getElementById("expense-form").reset();
   document.getElementById("description").focus(); // Focus on description input field
 
+  Swal.fire({
+    icon: "success",
+    title: "Expense Added!",
+    text: "Your expense added successfully.",
+    showConfirmButton: false,
+    timer: 4000,
+  });
+
   renderExpenseList(expenses);
   renderCategoryChart(expenses);
   renderTimeChart(expenses);
@@ -185,6 +193,15 @@ function updateExpense() {
 
     // Clear the expenseToUpdate variable
     expenseToUpdate = null;
+
+    // Show SweetAlert2 notification
+    Swal.fire({
+      icon: "success",
+      title: "Expense Updated!",
+      text: "The expense has been updated successfully.",
+      showConfirmButton: false,
+      timer: 4000,
+    });
 
     renderExpenseList(expenses);
     renderCategoryChart(expenses);

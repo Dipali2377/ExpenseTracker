@@ -6,10 +6,57 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f7fc;
+  background: linear-gradient(to bottom right, #d6a4e8, #b392f0);
+  background-attachment: fixed; /* Makes the background stay fixed while scrolling */
   color: #333;
   line-height: 1.6;
   padding: 20px;
+}
+
+.container {
+  width: 85%;
+  max-width: 2000px;
+  margin: 40px auto;
+  background: rgba(255, 255, 255, 0.95); /* Transparent white background */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Adding a subtle overlay pattern */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://www.transparenttextures.com/patterns/cubes.png"); /* Use any texture */
+  opacity: 0.08; /* Slightly reduce the overlay effect */
+  pointer-events: none; /* Allows interactions with content below */
+}
+
+/* Add a glowing border around headings */
+h1,
+h2,
+h3 {
+  border: 2px solid transparent;
+  padding: 10px;
+  border-radius: 10px;
+  animation: glow 2s infinite alternate;
+}
+
+/* Glow effect animation */
+@keyframes glow {
+  0% {
+    border-color: #d6a4e8;
+    box-shadow: 0 0 10px #d6a4e8;
+  }
+  100% {
+    border-color: #b392f0;
+    box-shadow: 0 0 20px #b392f0;
+  }
 }
 
 .container {
@@ -29,7 +76,7 @@ h1 {
   margin-bottom: 40px;
   color: #2c3e50;
   font-weight: 700;
-  background: linear-gradient(to right, #36a2eb, #4caf50);
+  background: linear-gradient(to right, #d6a4e8, #b392f0);
   -webkit-background-clip: text;
   color: transparent;
   text-transform: uppercase;
@@ -44,7 +91,12 @@ h3 {
   margin-bottom: 20px;
   font-weight: 600;
 }
-
+.expense-chart-heading {
+  align-items: center;
+  margin-top: 180px;
+  margin-bottom: 100px;
+  padding: 50px;
+}
 form {
   display: flex;
   justify-content: space-between;
@@ -110,7 +162,7 @@ form button:hover {
   border-color: #36a2eb;
 }
 
-#expense-table {
+/* #expense-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 30px;
@@ -167,6 +219,87 @@ form button:hover {
 
 #expense-table td button.delete:hover {
   background-color: #c0392b;
+} */
+#expense-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: tableFadeIn 1s ease-out;
+}
+
+#expense-table th,
+#expense-table td {
+  border: none;
+  padding: 15px 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+#expense-table th {
+  background: linear-gradient(to right, #d6a4e8, #b392f0);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#expense-table td {
+  background-color: #f9f5ff;
+  color: #333;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+/* Alternating row colors for better readability */
+#expense-table tr:nth-child(even) td {
+  background-color: #f4e9ff;
+}
+
+#expense-table tr:nth-child(odd) td {
+  background-color: #f9f5ff;
+}
+
+/* Add a hover effect for rows */
+#expense-table tr:hover td {
+  background-color: #e9d7ff;
+  cursor: pointer;
+}
+
+/* Add hover effects for buttons inside the table */
+#expense-table td button {
+  padding: 8px 16px;
+  margin-right: 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#expense-table td button.update {
+  background-color: #b392f0;
+  color: white;
+}
+
+#expense-table td button.delete {
+  background-color: #d65f8c;
+  color: white;
+}
+
+#expense-table td button:hover {
+  transform: scale(1.1);
+}
+
+#expense-table td button.update:hover {
+  background-color: #9e7add;
+}
+
+#expense-table td button.delete:hover {
+  background-color: #c04a77;
 }
 
 .charts-section {
