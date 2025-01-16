@@ -1,28 +1,13 @@
-let expenses = [
-  {
-    id: 1,
-    description: "Groceries",
-    amount: 50,
-    category: "Food",
-    timestamp: "2025-01-10T10:00:00",
-  },
-  {
-    id: 2,
-    description: "Bus Ticket",
-    amount: 20,
-    category: "Transport",
-    timestamp: "2025-01-10T14:00:00",
-  },
-  {
-    id: 3,
-    description: "Movie Ticket",
-    amount: 30,
-    category: "Entertainment",
-    timestamp: "2025-01-11T18:00:00",
-  },
-];
+// Retrieve expenses from localStorage or use an empty array
+let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
+// Variable to store the expense being updated
 let expenseToUpdate = null;
+
+// Save expenses to localStorage
+function saveToLocalStorage() {
+  localStorage.setItem("expenses", JSON.stringify(expenses));
+}
 
 // Function to generate random colors for the chart
 function generateColors(count) {
@@ -44,14 +29,11 @@ function renderCategoryChart(filteredExpenses) {
   const labels = Object.keys(data);
   const values = Object.values(data);
 
-  // Destroy the existing chart if it's there
   if (window.categoryChart) {
     window.categoryChart.destroy();
   }
 
   const ctx = document.getElementById("category-chart").getContext("2d");
-
-  // Create a new chart with updated data
   window.categoryChart = new Chart(ctx, {
     type: "pie",
     data: {
@@ -74,50 +56,67 @@ function renderCategoryChart(filteredExpenses) {
 function renderTimeChart(filteredExpenses) {
   const data = filteredExpenses.reduce((acc, exp) => {
     const date = new Date(exp.timestamp);
-    const dateString = date.toISOString().split("T")[0]; // Get the date in YYYY-MM-DD format
-
-    // If the date doesn't exist in the accumulator, initialize it to 0
-    if (!acc[dateString]) acc[dateString] = 0;
-    acc[dateString] += exp.amount; // Add the expense amount to the specific date
+    const dateString = date.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+    acc[dateString] = (acc[dateString] || 0) + exp.amount;
     return acc;
   }, {});
 
-  // Extract the dates (YYYY-MM-DD) and the corresponding total expenses
-  const labels = Object.keys(data); // These are the dates (e.g., ["2025-01-10", "2025-01-11"])
-  const values = Object.values(data); // These are the corresponding total expenses
+  // Ensure there is data to display
+  if (Object.keys(data).length === 0) {
+    console.log("No expenses to display in the time chart.");
+    return;
+  }
 
-  const ctx = document.getElementById("time-chart").getContext("2d");
+  const labels = Object.keys(data);
+  const values = Object.values(data);
 
-  // Destroy the previous chart if it exists to avoid duplicate charts
+  // Check if there is an existing chart and destroy it
   if (window.timeChart) {
     window.timeChart.destroy();
   }
 
-  // Create a new line chart with updated data
+  // Create or update the chart
+  const ctx = document.getElementById("time-chart").getContext("2d");
   window.timeChart = new Chart(ctx, {
-    type: "line", // Line chart type
+    type: "line",
     data: {
-      labels: labels, // X-axis: the dates (e.g., "2025-01-10")
+      labels: labels,
       datasets: [
         {
-          label: "Expenses per Day", // The label for the dataset
-          data: values, // Y-axis: total expenses for each day
-          fill: false, // No fill under the line
-          borderColor: "#36A2EB", // Line color
-          tension: 0.1, // Smoothness of the line
+          label: "Expenses per Day",
+          data: values,
+          fill: false,
+          borderColor: "#36A2EB",
+          tension: 0.1,
         },
       ],
     },
     options: {
-      responsive: true, // Ensure the chart is responsive
+      responsive: true,
+      scales: {
+        x: {
+          type: "category", // Ensure that the x-axis is treated as a category axis
+          title: {
+            display: true,
+            text: "Date",
+          },
+        },
+        y: {
+          title: {
+            display: true,
+            text: "Amount",
+          },
+          beginAtZero: true, // Ensure the y-axis starts at 0
+        },
+      },
     },
   });
 }
 
-// Function to render the expenses list in a table format
+// Function to render the expenses list
 function renderExpenseList(filteredExpenses) {
   const expenseList = document.getElementById("expense-list");
-  expenseList.innerHTML = ""; // Clear the existing list
+  expenseList.innerHTML = "";
 
   filteredExpenses.forEach((expense) => {
     const row = document.createElement("tr");
@@ -134,27 +133,27 @@ function renderExpenseList(filteredExpenses) {
   });
 }
 
-// Function to add a new expense to the list
+// Function to add a new expense
 function addExpense(description, amount, category) {
   const expense = {
-    id: Date.now(), // Ensure a unique id
+    id: Date.now(),
     description,
     amount,
     category,
     timestamp: new Date().toISOString(),
   };
   expenses.push(expense);
+  saveToLocalStorage();
 
-  // Reset the form fields and focus on the description field
   document.getElementById("expense-form").reset();
-  document.getElementById("description").focus(); // Focus on description input field
+  document.getElementById("description").focus();
 
   Swal.fire({
     icon: "success",
     title: "Expense Added!",
     text: "Your expense added successfully.",
     showConfirmButton: false,
-    timer: 4000,
+    timer: 3000,
   });
 
   renderExpenseList(expenses);
@@ -166,12 +165,10 @@ function addExpense(description, amount, category) {
 function prepareUpdateExpense(id) {
   expenseToUpdate = expenses.find((expense) => expense.id === id);
 
-  // Populate form fields with the expense data
   document.getElementById("description").value = expenseToUpdate.description;
   document.getElementById("amount").value = expenseToUpdate.amount;
   document.getElementById("category").value = expenseToUpdate.category;
 
-  // Change the button text to "Update Expense"
   document.getElementById("submit-button").textContent = "Update Expense";
 }
 
@@ -182,25 +179,22 @@ function updateExpense() {
   const category = document.getElementById("category").value;
 
   if (description && amount && category && expenseToUpdate) {
-    // Update the expense in the list
     expenseToUpdate.description = description;
     expenseToUpdate.amount = amount;
     expenseToUpdate.category = category;
 
-    // Reset the form fields and button text after the update
     document.getElementById("expense-form").reset();
-    document.getElementById("submit-button").textContent = "Add Expense"; // Reset button text
-
-    // Clear the expenseToUpdate variable
+    document.getElementById("submit-button").textContent = "Add Expense";
     expenseToUpdate = null;
 
-    // Show SweetAlert2 notification
+    saveToLocalStorage();
+
     Swal.fire({
       icon: "success",
       title: "Expense Updated!",
       text: "The expense has been updated successfully.",
       showConfirmButton: false,
-      timer: 4000,
+      timer: 3000,
     });
 
     renderExpenseList(expenses);
@@ -212,45 +206,13 @@ function updateExpense() {
 // Function to delete an expense
 function deleteExpense(id) {
   expenses = expenses.filter((expense) => expense.id !== id);
+  saveToLocalStorage();
   renderExpenseList(expenses);
   renderCategoryChart(expenses);
   renderTimeChart(expenses);
 }
 
-// Event listener for form submission to add or update an expense
-document.getElementById("expense-form").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const description = document.getElementById("description").value;
-  const amount = parseFloat(document.getElementById("amount").value);
-  const category = document.getElementById("category").value;
-
-  if (description && amount && category) {
-    if (expenseToUpdate) {
-      updateExpense(); // Update the expense
-    } else {
-      addExpense(description, amount, category); // Add a new expense
-    }
-  }
-});
-
-// Event listener for filter changes
-document.getElementById("filter-category").addEventListener("change", (e) => {
-  const filteredExpenses =
-    e.target.value === "All"
-      ? expenses
-      : expenses.filter((expense) => expense.category === e.target.value);
-
-  renderExpenseList(filteredExpenses);
-  renderCategoryChart(filteredExpenses);
-  renderTimeChart(filteredExpenses);
-});
-
-// Initial render of charts and expense list
-renderExpenseList(expenses);
-renderCategoryChart(expenses);
-renderTimeChart(expenses);
-
-// Function to convert expenses data to CSV format
+// Function to export expenses to CSV
 function convertToCSV(expenses) {
   const headers = ["Description", "Amount", "Category", "Timestamp"];
   const rows = expenses.map((expense) => [
@@ -284,3 +246,36 @@ function exportToCSV() {
 
 // Event listener for the export CSV button
 document.getElementById("export-csv").addEventListener("click", exportToCSV);
+
+// Event listener for form submission
+document.getElementById("expense-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const description = document.getElementById("description").value;
+  const amount = parseFloat(document.getElementById("amount").value);
+  const category = document.getElementById("category").value;
+
+  if (description && amount && category) {
+    if (expenseToUpdate) {
+      updateExpense();
+    } else {
+      addExpense(description, amount, category);
+    }
+  }
+});
+
+// Event listener for filter changes
+document.getElementById("filter-category").addEventListener("change", (e) => {
+  const filteredExpenses =
+    e.target.value === "All"
+      ? expenses
+      : expenses.filter((expense) => expense.category === e.target.value);
+
+  renderExpenseList(filteredExpenses);
+  renderCategoryChart(filteredExpenses);
+  renderTimeChart(filteredExpenses);
+});
+
+// Initial render
+renderExpenseList(expenses);
+renderCategoryChart(expenses);
+renderTimeChart(expenses);
