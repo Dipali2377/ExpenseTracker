@@ -6,11 +6,12 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to bottom right, #d6a4e8, #b392f0);
+  /* background: linear-gradient(to bottom right, #d6a4e8, #b392f0); */
   background-attachment: fixed; /* Makes the background stay fixed while scrolling */
   color: #333;
   line-height: 1.6;
   padding: 20px;
+  background-color: rgb(254, 248, 248);
 }
 
 .container {
@@ -48,7 +49,7 @@ h3 {
 }
 
 /* Glow effect animation */
-@keyframes glow {
+/* @keyframes glow {
   0% {
     border-color: #d6a4e8;
     box-shadow: 0 0 10px #d6a4e8;
@@ -57,7 +58,7 @@ h3 {
     border-color: #b392f0;
     box-shadow: 0 0 20px #b392f0;
   }
-}
+} */
 
 .container {
   width: 85%;
@@ -74,14 +75,13 @@ h1 {
   text-align: center;
   font-size: 3rem;
   margin-bottom: 40px;
-  color: #2c3e50;
+  font-style: italic;
   font-weight: 700;
-  background: linear-gradient(to right, #d6a4e8, #b392f0);
-  -webkit-background-clip: text;
-  color: transparent;
+
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); */
 }
 
 h2,
@@ -148,6 +148,7 @@ form button:hover {
   display: flex;
   justify-content: flex-start;
   margin-bottom: 30px;
+  margin-top: 20px;
 }
 
 #filter-category {
@@ -163,64 +164,6 @@ form button:hover {
   border-color: #36a2eb;
 }
 
-/* #expense-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 30px;
-  animation: tableFadeIn 1s ease-out;
-}
-
-#expense-table th,
-#expense-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
-  font-size: 14px;
-}
-
-#expense-table th {
-  background-color: #f2f2f2;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-#expense-table td {
-  background-color: #ffffff;
-  color: #333;
-  font-size: 14px;
-}
-
-#expense-table td button {
-  padding: 6px 12px;
-  margin-right: 10px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-#expense-table td button.update {
-  background-color: #4caf50;
-  color: white;
-}
-
-#expense-table td button.delete {
-  background-color: #e74c3c;
-  color: white;
-}
-
-#expense-table td button:hover {
-  transform: scale(1.1);
-}
-
-#expense-table td button.update:hover {
-  background-color: #45a049;
-}
-
-#expense-table td button.delete:hover {
-  background-color: #c0392b;
-} */
 #expense-table {
   width: 100%;
   border-collapse: collapse;
@@ -241,7 +184,7 @@ form button:hover {
 
 #expense-table th {
   background: linear-gradient(to right, #d6a4e8, #b392f0);
-  color: white;
+  color: black;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -373,4 +316,82 @@ form button:hover {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Wrapper styling */
+.wrapper {
+  display: flex;
+  justify-content: space-between; /* Positions filter to the left and search to the right */
+  align-items: center; /* Aligns items vertically */
+  padding: 10px 20px; /* Adds some spacing inside the wrapper */
+  border: 1px solid #ddd; /* Optional: Add border for clarity */
+  background-color: #f8f9fa; /* Light background */
+  border-radius: 8px; /* Smooth corners */
+}
+
+/* Filters styling */
+.filters {
+  display: flex;
+  align-items: center; /* Aligns label and dropdown vertically */
+  gap: 10px; /* Adds space between the label and dropdown */
+}
+
+.filters label {
+  font-size: 14px;
+  color: #333;
+}
+
+.filters select {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.filters select:focus {
+  border-color: #36a2eb;
+  box-shadow: 0 0 8px rgba(54, 162, 235, 0.5);
+}
+
+/* Search container styling */
+.search-container {
+  display: flex;
+  align-items: center;
+  position: relative; /* Allows positioning the icon inside the input */
+}
+
+.search-container input {
+  width: 250px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background-color: #fff;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-container input:focus {
+  border-color: #36a2eb;
+  box-shadow: 0 0 10px rgba(54, 162, 235, 0.5);
+}
+
+.search-container span {
+  position: absolute;
+  right: 10px; /* Adjusts the icon position inside the input */
+  cursor: pointer;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.search-container span:hover {
+  color: #36a2eb;
+}
+
+.search-container i {
+  font-size: 16px;
 }

@@ -114,9 +114,28 @@ function renderTimeChart(filteredExpenses) {
 }
 
 // Function to render the expenses list
+// function renderExpenseList(filteredExpenses) {
+//   const expenseList = document.getElementById("expense-list");
+//   expenseList.innerHTML = "";
+
+//   filteredExpenses.forEach((expense) => {
+//     const row = document.createElement("tr");
+//     row.innerHTML = `
+//       <td>${expense.description}</td>
+//       <td>${expense.amount}</td>
+//       <td>${expense.category}</td>
+//       <td>
+//         <button class="update" onclick="prepareUpdateExpense(${expense.id})">Update</button>
+//         <button class="delete" onclick="deleteExpense(${expense.id})">Delete</button>
+//       </td>
+//     `;
+//     expenseList.appendChild(row);
+//   });
+// }
+// Function to render the expenses list
 function renderExpenseList(filteredExpenses) {
   const expenseList = document.getElementById("expense-list");
-  expenseList.innerHTML = "";
+  expenseList.innerHTML = ""; // Clear existing list
 
   filteredExpenses.forEach((expense) => {
     const row = document.createElement("tr");
@@ -205,11 +224,26 @@ function updateExpense() {
 
 // Function to delete an expense
 function deleteExpense(id) {
-  expenses = expenses.filter((expense) => expense.id !== id);
-  saveToLocalStorage();
-  renderExpenseList(expenses);
-  renderCategoryChart(expenses);
-  renderTimeChart(expenses);
+  Swal.fire({
+    title: "Are you sure?",
+    text: "This action cannot be undone!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      expenses = expenses.filter((expense) => expense.id !== id);
+
+      saveToLocalStorage();
+      renderExpenseList(expenses);
+      renderCategoryChart(expenses);
+      renderTimeChart(expenses);
+
+      Swal.fire("Deleted!", "Your expense has been deleted.", "success");
+    }
+  });
 }
 
 // Function to export expenses to CSV
@@ -274,6 +308,24 @@ document.getElementById("filter-category").addEventListener("change", (e) => {
   renderCategoryChart(filteredExpenses);
   renderTimeChart(filteredExpenses);
 });
+
+function searchByDescription() {
+  const searchValue = document
+    .querySelector(".search-container input")
+    .value.toLowerCase(); // Get search input value
+  const rows = document.querySelectorAll("#expense-list tr");
+
+  rows.forEach((row) => {
+    const description = row
+      .querySelector("td:nth-child(1)")
+      .textContent.toLowerCase(); // Target the description column (first column)
+    if (description.includes(searchValue)) {
+      row.style.display = ""; // Show row
+    } else {
+      row.style.display = "none"; // Hide row
+    }
+  });
+}
 
 // Initial render
 renderExpenseList(expenses);
