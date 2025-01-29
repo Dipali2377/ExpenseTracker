@@ -1,13 +1,17 @@
 # Expense Tracker 💰
 
+![Expense Tracker Preview](ExpenseTracker.jpeg)
+
 A simple **Expense Tracker** application built using **HTML5, CSS3, and JavaScript**. This project helps users efficiently manage their **daily expenses and income** by providing an easy-to-use interface and **LocalStorage** for data persistence.
 
 ## 🌟 Features:
 
-- ✅ Add and remove income/expenses
-- ✅ Displays total balance, income, and expenses
+- ✅ Add and remove expenses
+- ✅ Displays list of expenses with category.
 - ✅ Data stored using **LocalStorage** (persists even after page refresh)
 - ✅ Interactive and responsive UI
+- ✅ Search functionality
+- ✅ Data visualization using pie-chart and line graph
 
 ## 📂 Technologies Used:
 
